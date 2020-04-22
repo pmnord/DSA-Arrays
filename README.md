@@ -245,6 +245,27 @@ Write an algorithm that deletes given characters from a string. For example, giv
 
 Input:'Battle of the Vowels: Hawaii vs. Grozny', 'aeiou'
 Output: 'Bttl f th Vwls: Hw vs. Grzny'
+
+```js
+function removeChars(string, chars) {
+  const string = string.split('');
+  const chars = chars.split('');
+  const result = [];
+
+  for (let el of string) {
+    if (!chars.includes(el)) {
+      result.push(el);
+    }
+  }
+
+  return result.join('');
+}
+removeChars('Battle of the Vowels: Hawaii vs. Grozny', 'aeiou');
+// Bttl f th Vwls: Hw vs. Grzny
+```
+>O(n * k), number of chars in the sentance 
+times the number of chars to remove
+
 ## 10. Products
 Given an array of numbers, write an algorithm to find out the products of every other number except the number at each index.
 
@@ -289,7 +310,43 @@ Output:
 ```
 
 ```js
+// We'll have to iterate over element in the array to check for 0
+// If we hit a 0, we'll have to iterate height+width times
 
+function detonateZeroes(array) {
+  let zeroes = []
+
+  for (let i = 0; i < array.length; i++) {
+    for (let j = 0; j < array[i].length; j++) {
+      if (array[i][j] === 0) {
+        zeroes.push([i, j])
+      }
+    }
+  }
+
+  zeroes.forEach(zero => {
+    let row = zero[0];
+    let column = zero[1];
+
+    for (let i = 0; i < array.length; i++) {
+      for (let j = 0; j < array[i].length; j++) {
+        if (i === row || j === column) {
+          array[i][j] = 0;
+        }
+      }
+    }
+  })
+
+  return array;
+}
+detonateZeroes(
+  [[1,0,1,1,0],
+  [0,1,1,1,0],
+  [1,1,1,1,1],
+  [1,0,1,1,1],
+  [1,1,1,1,1]]
+);
+// O(2n^2)
 ```
 ## 12. String rotation
 Given 2 strings, str1 and str2, write a program that checks if str2 is a rotation of str1.
@@ -301,3 +358,24 @@ Output: False
 Input: amazon, azonam
 
 Output: true
+
+```js
+function isRotation(string1, string2) {
+  let arr = string1.split('');
+  for (let i = 0; i < arr.length; i++) {
+    let temp = arr.shift();
+    arr.push(temp);
+    let rotation = arr.join('')
+    
+    if (rotation === string2) {
+      return true;
+    }
+  }
+  return false;
+}
+isRotation('amazon', 'azonma')
+// false
+isRotation('amazon', 'azonam')
+// true
+```
+> O(n), we iterate once for every char in the string
